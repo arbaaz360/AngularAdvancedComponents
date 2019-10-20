@@ -1,8 +1,19 @@
 <div>
-  <h1>Timers</h1>
-  <app-timer init="3" (onComplete)="logCountDownEnd()"></app-timer>
-  <app-timer init="120" (onComplete)="logCountDownEnd()"></app-timer>
-  <app-timer init="40" (onComplete)="logCountDownEnd()"></app-timer>
+  <app-tabs>
+    <app-tab title="Timers">
+      <app-timer
+        *ngFor="let timer of timers"
+        init="{{ timer }}"
+        (onComplete)="logCountDownEnd()"
+      ></app-timer>
+    </app-tab>
+    <app-tab title="Crono">
+      Crono. Not available.
+    </app-tab>
+    <app-tab title="Alerm">
+      Alarm. Not available.
+    </app-tab>
+  </app-tabs>
 
   <button class="add" (click)="showAddTimer()">+</button>
 
@@ -11,10 +22,16 @@
     <input [(ngModel)]="time" type="number" />
 
     <button (click)="hideAddTimer()" class="cancel-button">Cancel</button>
-    <button>Ok</button>
+    <button (click)="submitAddTimer()">Ok</button>
 
     <div class="header">
       This is my header
     </div>
+  </app-alert-view>
+
+  <app-alert-view [hidden]="!isEndTimerAlertVisible">
+    <label>Timer Ended</label>
+    <div>YOur coundown has finished</div>
+    <button (click)="hideEndTimerAlert()">Ok</button>
   </app-alert-view>
 </div>
