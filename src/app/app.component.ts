@@ -3,32 +3,43 @@ import {
   Component,
   ViewChild,
   AfterViewInit,
-  AfterContentInit
+  AfterContentInit,
+  ViewChildren,
+  QueryList,
+  ChangeDetectorRef
 } from "@angular/core";
+import { isNgTemplate } from "@angular/compiler";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements AfterContentInit {
+export class AppComponent implements AfterContentInit, AfterViewInit {
   public isAddTimerVisible: boolean = false;
   public time: number = 0;
   public timers: Array<number> = [];
-  public isEndTimerAlertVisible = false;
 
-  @ViewChild(SimpleAlertViewComponent) alert: SimpleAlertViewComponent;
+  @ViewChildren(SimpleAlertViewComponent) alerts: QueryList<
+    SimpleAlertViewComponent
+  >;
 
-  constructor() {
+  constructor(private cdRef: ChangeDetectorRef) {
     this.timers = [2, 3, 185];
     console.log(this.timers);
   }
-  ngAfterContentInit() {
-    console.log(this.alert);
-    this.alert.show();
-    this.alert.title = "hi";
-    this.alert.message = "hi";
+  ngAfterViewInit() {
+    this.alerts.forEach(item => {
+      if (!item.title) {
+        item.title = "Hi!";
+        item.message = "Hello world";
+      }
+      item.show();
+    });
+    this.cdRef.detectChanges();
   }
+
+  ngAfterContentInit() {}
   logCountDownEnd() {
     console.log("the countdown has finished");
     this.showEndTimerAlert();
@@ -45,9 +56,6 @@ export class AppComponent implements AfterContentInit {
     this.hideAddTimer();
   }
   showEndTimerAlert() {
-    this.isEndTimerAlertVisible = true;
-  }
-  hideEndTimerAlert() {
-    this.isEndTimerAlertVisible = false;
+    this.alerts.first.show();
   }
 }
