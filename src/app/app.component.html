@@ -1,4 +1,20 @@
 <div>
   <h1>Timers</h1>
-  <app-timer init="20"></app-timer>
+  <app-timer init="3" (onComplete)="logCountDownEnd()"></app-timer>
+  <app-timer init="120" (onComplete)="logCountDownEnd()"></app-timer>
+  <app-timer init="40" (onComplete)="logCountDownEnd()"></app-timer>
+
+  <button class="add" (click)="showAddTimer()">+</button>
+
+  <app-alert-view [hidden]="!isAddTimerVisible">
+    <label>Set the number of seconds for your timer</label>
+    <input [(ngModel)]="time" type="number" />
+
+    <button (click)="hideAddTimer()" class="cancel-button">Cancel</button>
+    <button>Ok</button>
+
+    <div class="header">
+      This is my header
+    </div>
+  </app-alert-view>
 </div>
